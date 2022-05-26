@@ -1,1 +1,37 @@
-Coming soon, stay tuned~
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>ProGRIP</title>
+  <!-- <link rel="shortcut icon" href="data/favicon.ico"/> -->
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+
+<div id='container'>
+	<div id='title'><h1>Unsupervised Learning of Shape Programs with Repeatable Implicit Parts</h1></div>
+
+	<div class="sect">
+		<span class="keyword">Abstract:</span>
+        Shape programs encode shape structures by representing object parts as subroutines and constructing the overall shape by composing these subroutines. This usually involves the reuse of subroutines for repeatable parts, enabling the modeling of correlations among shape elements such as geometric similarity. However, existing learning-based shape programs suffer from limited representation capacity because they use coarse geometry representations such as geometric primitives and low-resolution voxel grids. Further, their training requires manually annotated ground-truth programs, which are expensive to attain. We address these limitations by proposing Shape Programs with Repeatable Implicit Parts (ProGRIP). Using implicit functions to represent parts, ProGRIP greatly boosts the representation capacity of shape programs while preserving the higher-level structure of repetitions and symmetry. Meanwhile, we free ProGRIP from any inaccessible supervised training via devising a matching-based unsupervised training objective. Our empirical studies show that ProGRIP outperforms existing structured representations in shape reconstruction fidelity as well as segmentation accuracy of semantic parts.
+	</div>
+
+	<hr>
+
+
+    <div class="sect" align="middle">
+        <span class="keyword">An example of synthesized shape program.</span><br><br>
+        <div id="example"><img src="teaser.png" width="100%"/></div>
+        <p align='left'><span class="keyword">Fig. 1:</span> Our method represents an object as a shape program with repeatable implicit parts
+            (ProGRIP). The program has two levels: the top level defines a set of repeatable parts (as latent vector
+            zi) and the bottom level defines all occurrences of each part with varying poses. The joint predictions,
+            i.e., posed parts, are executed as posed implicit functions. Both the generation and the execution of
+            ProGRIP are invariant to the order of predictions at both levels. ProGRIP can be learned without any
+            annotations using our proposed matching-based unsupervised training objective.</p>
+    
+       <hr>
+
+</div>
+</body>
+</html>
