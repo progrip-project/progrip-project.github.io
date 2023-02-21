@@ -3,21 +3,68 @@
 
 <head>
   <title>ProGRIP</title>
-  <!-- <link rel="shortcut icon" href="data/favicon.ico"/> -->
+  <link rel="shortcut icon" href="favicon.ico"/>
   <link rel="stylesheet" type="text/css" href="style.css">
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+  </script>
+  <script type="text/javascript"
+    src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+
 </head>
 
 <body>
 
 <div id='container'>
 	<div id='title'><h1>Unsupervised Learning of Shape Programs with Repeatable Implicit Parts</h1></div>
+  <div id='conf'><h2>NeurIPS 2022</h2></div>
+  <div id='authors'>   
+		<ul>
+			<li><a href="https://boyangdeng.com/" class="author">Boyang Deng &#9733; &#9830;</a></li>
+			<li><a href="https://cs.stanford.edu/~sumith" class="author">Sumith Kulal &#9733; &#9830;</a></li>
+			<li><a href="https://www.linkedin.com/in/leo-dong-b154a8186" class="author">Zhengyang Dong &#9830;</a></li>
+			<li><a href="https://cs.stanford.edu/~congyue/" class="author">Congyue Deng &#9830;</a></li>
+      <li><a href="https://people.csail.mit.edu/yonglong/" class="author">Yonglong Tian &#167; </a></li>
+      <li><a href="https://jiajunwu.com/" class="author">Jiajun Wu &#9830;</a></li>
+		</ul>
+		<p id="affiliation">
+      &#9830; Stanford University 
+      &#167; MIT
+      &#9733; Equal contributions
+    </p>
+	</div>
 
 	<div class="sect">
 		<span class="keyword">Abstract:</span>
         Shape programs encode shape structures by representing object parts as subroutines and constructing the overall shape by composing these subroutines. This usually involves the reuse of subroutines for repeatable parts, enabling the modeling of correlations among shape elements such as geometric similarity. However, existing learning-based shape programs suffer from limited representation capacity because they use coarse geometry representations such as geometric primitives and low-resolution voxel grids. Further, their training requires manually annotated ground-truth programs, which are expensive to attain. We address these limitations by proposing Shape Programs with Repeatable Implicit Parts (ProGRIP). Using implicit functions to represent parts, ProGRIP greatly boosts the representation capacity of shape programs while preserving the higher-level structure of repetitions and symmetry. Meanwhile, we free ProGRIP from any inaccessible supervised training via devising a matching-based unsupervised training objective. Our empirical studies show that ProGRIP outperforms existing structured representations in shape reconstruction fidelity as well as segmentation accuracy of semantic parts.
 	</div>
 
-	<hr>
+  <div id="links">
+    <ul>
+        <li><a href="https://openreview.net/forum?id=EENzpzcs4Vy" class="keyword">Paper</a> (PDF & Supp)</li>
+        <li><a href="https://slideslive.com/38991527/unsupervised-learning-of-shape-programs-with-repeatable-implicit-parts" class="keyword">Talk</a> </li>
+        <li><a href="https://github.com/progrip-project" class="keyword">Code</a> </li>
+        <li><p class='keyword'>Citation</p></li>
+    </ul>
+  </div>
+
+  <pre id="bib">
+  @article{progrip2022,
+      Author = {Boyang Deng and Sumith Kulal and Zhengyang Deng and Congyue Deng and Yonglong Tian and Jiajun Wu},
+      Title = {Unsupervised Learning of Shape Programs with Repeatable Implicit Parts},
+      booktitle={NeurIPS},
+      year={2022},
+  }</pre>
+  
+    <hr>
+  
+    <div class="sect" align="middle">
+      <span class="keyword">Video</span><br>
+      <div id="embed"></div>
+      <!-- <iframe src="https://slideslive.com/embed/presentation/38991527" width="<width>" height="<height>" allow="autoplay; fullscreen" sandbox="allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts allow-top-navigation" frameborder="0" scrolling="no"></iframe> -->
+	  <hr>
 
 
     <div class="sect" align="middle">
@@ -25,13 +72,91 @@
         <div id="example"><img src="teaser.png" width="100%"/></div>
         <p align='left'><span class="keyword">Fig. 1:</span> Our method represents an object as a shape program with repeatable implicit parts
             (ProGRIP). The program has two levels: the top level defines a set of repeatable parts (as latent vector
-            zi) and the bottom level defines all occurrences of each part with varying poses. The joint predictions,
+            $z_i$) and the bottom level defines all occurrences of each part with varying poses. The joint predictions,
             i.e., posed parts, are executed as posed implicit functions. Both the generation and the execution of
             ProGRIP are invariant to the order of predictions at both levels. ProGRIP can be learned without any
             annotations using our proposed matching-based unsupervised training objective.</p>
-    
        <hr>
 
+    <div class="sect" align="middle">
+        <span class="keyword">An overview of the ProGRIP generation pipeline.</span><br><br>
+        <div id="example"><img src="generation.png" width="100%"/></div>
+        <p align='left'><span class="keyword">Fig. 2:</span> Given a pointcloud, an auto-encoding architecture generates a
+          ProGRIP composed of 2 levels of predictions. At the geometry level, our model predicts a set of
+          $(s_i, z_i)$-pairs as the scales and deep latents of repeatable parts <b>(middle)</b>; at the pose level, our model
+          predicts a set of $(t_{i,j} , R_{i,j} , \delta_{i,j}$)-triplets as translations, rotations, and existence probabilities <b>(right)</b>.
+          Transformers are used at both levels for permutation invariant predictions.</p>
+       <hr>
+
+    <div class="sect" align="middle">
+      <span class="keyword">We represent shapes as a collection of Posed Implicit Functions.</span><br><br>
+      <div id="example"><img src="posed.png" width="100%"/></div>
+      <p align='left'><span class="keyword">Fig. 3:</span> We execute each posed part (i.e., a $(s_i, z_i, t_{i,j}, R_{i,j}, \delta_{i,j})$ tuple) as a posed implicit function.
+    A posed implicit function constructs an occupancy function $o_{i,j}$ to answer point queries $x$.
+    For each query point $x$, we first canonicalise it using $(s_i, t_{i,j}, R_{i,j})$,  then predict its occupancy conditioned on part latent $z_i$, and finally mask it by binarised existance $\delta_{i,j}$.</p>
+     <hr>
+
+    <div class="sect" align="middle">
+      <span class="keyword">We propose an unsupervised matching-based loss.</span><br><br>
+      <div id="example"><img src="loss.png" width="100%"/></div>
+      <p align='left'><span class="keyword">Fig. 4:</span> On a task of fitting repeatable parts to a target shape, starting from the same initialization, the reconstruction loss <b>(left)</b> confines each posed parts to their initial local neighborhood and consequently prevents better parts arrangements.
+        Conversely, our matching loss <b>(right)</b> match posed parts to local geometry of targets by shapes, thus rescue the part arrangement from the suboptimal local minima in reconstruction loss.</p>
+     <hr>
+
+    <div class="sect" align="middle">
+      <span class="keyword">Qualitative visualization of reconstruction by ProGRIP.</span><br><br>
+      <div id="example">
+        <!-- <img src="loss.png" width="100%"/> -->
+      <video autoplay loop muted inline width="100%">
+        <source src="recon.mp4" type="video/mp4" alt="reconstruction results">
+      </video>
+      </div>
+      <p align='left'><span class="keyword">Fig. 5:</span> Colors indicate the repeatable parts predicted by ProGRIP. <b>Bottom</b>: An explosive view with the parts dissected apart.</p>
+     <hr>
+
+     <div class="sect" align="middle">
+      <span class="keyword">Qualitative visualization of semantic segmentation using ProGRIP.</span><br><br>
+      <div id="example">
+        <!-- <img src="loss.png" width="100%"/> -->
+      <video autoplay loop muted inline width="100%">
+        <source src="seg.mp4" type="video/mp4" alt="segmentation results">
+      </video>
+      </div>
+      <p align='left'><span class="keyword">Fig. 6:</span> Each color indicates a different semantic part predicted by ProGRIP.</p>
+     <hr>
+
+     <div class="sect" align="middle">
+      <span class="keyword">Qualitative visualization of interactive editing enabled by ProGRIP.</span><br><br>
+      <div id="example">
+        <!-- <img src="loss.png" width="100%"/> -->
+      <video autoplay loop muted inline width="100%">
+        <source src="edit.mp4" type="video/mp4" alt="editing results">
+      </video>
+      </div>
+      <p align='left'><span class="keyword">Fig. 7:</span> Shown here is a demonstration of interactive shape editing. In the two chairs show, ProGRIP enables switching arms from reference chair into target chair. This as simple as selecting arms from both chair with one click each. Then we replace the arm latents in the target chair with latents from the reference chair to get the shown output. Note how the orientation of the arms are correctly updated. This is due to our disentanglement of shape and pose.
+        .</p>
+     <hr>
+
+    <div class="sect" align="left">
+      <span class="keyword">Acknowledgements:</span>
+      We'd like to thank Pratul Srinivasan for suggesting the compactness application of ProGRIP, Kaizhi Yang for kindly open-sourcing the code of CubeSeg, the Occupancy
+      Networks team for releasing their pre-processed occupancy samples, and the Stanford Artificial Intelligence Laboratory (SAIL) staff for maintaining and supporting our computational infrastructures.
+      This work is in part supported by the Stanford Institute for Human-Centered Artificial Intelligence
+      (HAI), Center for Integrated Facility Engineering (CIFE), Toyota Research Institute (TRI), NSF RI
+      #2211258, NSF CCRI #2120095, ONR MURI N00014-22-1-2740, and Adobe, Amazon, Analog,
+      Autodesk, IBM, JPMC, Meta, Salesforce, and Samsung. BD is funded by a Meta Research PhD
+      Fellowship. SK is in part supported by the Brown Institute for Media Innovation.
+    </div>  
+
 </div>
+
+<script src="https://slideslive.com/embed_presentation.js"></script>
+<script>
+  embed = new SlidesLiveEmbed('embed', {
+    presentationId: '38991527',
+    autoPlay: false,
+    verticalEnabled: true,
+  });
+</script>
 </body>
 </html>

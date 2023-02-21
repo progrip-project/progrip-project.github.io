@@ -17,12 +17,19 @@ body {
 }
 
 #title h1 {
-  font-size: 49px;
+  font-size: 40px;
+  margin: 0;
+}
+
+#conf h2 {
+    text-align: center;
+    font-weight: 300;
+    font-size: 24px;
 }
 
 #authors {
     width: 100%;
-    margin: 5px auto;
+    margin: 15px auto;
 }
 
 .keyword {
@@ -76,15 +83,24 @@ a:hover {
   margin: 30px 0;
 }
 
+#teaser_figure {
+    width: 1080px;
+    margin-left: -33.33%;
+    margin-right: -33.33%;
+    /* border: 0.4mm solid; */
+    margin-top: 30px;
+}
+
 #video_figure {
     width: 100%;
     height: 24vw;
-    border: 0.4mm solid;
+    /* border: 0.4mm solid; */
     margin-top: 30px;
 }
 
 .author:visited {
-    color: #000;
+    /* color: #000; */
+    color: #0000EE;
 }
 
 #affiliation {
